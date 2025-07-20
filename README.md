@@ -1,4 +1,102 @@
-# 🚀 MCP TypeScript Template: Agent, Server & Client
+# PocketSmith MCP Server
+
+*Generated from [cyanheads/mcp-ts-template](https://github.com/cyanheads/mcp-ts-template)*
+
+An MCP (Model Context Protocol) server for managing budgets via the PocketSmith API.
+
+Built on the [cyanheads/mcp-ts-template](https://github.com/cyanheads/mcp-ts-template), this server follows a modular architecture with robust error handling, logging, and security features while providing comprehensive PocketSmith integration.
+
+> See [POCKETSMITH_README.md](./POCKETSMITH_README.md) for complete PocketSmith-specific documentation.
+
+## Quick Start
+
+1. **Install dependencies**:
+   ```bash
+   npm install
+   ```
+
+2. **Set up environment**: Copy `.env.example` to `.env` and add your PocketSmith API key
+
+3. **Build**: 
+   ```bash
+   npm run build
+   ```
+
+4. **Run**:
+   ```bash
+   npm run start:stdio  # For MCP clients
+   npm run start:http   # For web applications
+   ```
+
+## Available Tools
+
+### Account Management
+- `get_accounts` - View account balances and information
+- `get_user_summary` - Comprehensive financial overview
+
+### Transaction Management  
+- `get_transactions` - Search and filter transactions with advanced criteria
+- `get_transaction` - Get detailed information about a specific transaction
+- `create_transaction` - Add new transactions with categories and notes
+- `update_transaction` - Modify existing transactions (change payee, amount, category, etc.)
+- `delete_transaction` - Remove transactions (with confirmation)
+
+### Category Management
+- `get_categories` - View spending categories and hierarchies  
+- `create_category` - Add new spending categories with colors and parent relationships
+- `update_category` - Modify existing categories (rename, recolor, reparent)
+
+### Budget Analysis
+- `get_budgets` - Analyze budget vs actual spending performance
+- `get_budget_summary` - Detailed budget analysis with period breakdowns
+
+### Recurring Events
+- `get_recurring_events` - View scheduled/recurring transactions and income
+
+### Attachments & Receipts
+- `get_transaction_attachments` - View attachments for specific transactions
+- `get_user_attachments` - View all user attachments across transactions
+- `create_transaction_attachment` - Add receipts and documents to transactions
+
+### Categorization Rules
+- `get_category_rules` - View automatic categorization rules
+- `create_category_rule` - Create rules for auto-categorizing transactions
+
+### Account Details
+- `get_account_transactions` - Get transactions for specific accounts
+- `get_transaction_accounts` - Detailed transaction account information
+
+### System Information
+- `get_currencies` - View supported currencies and their formats
+- `get_institutions` - View connected financial institutions
+
+## MCP Configuration
+
+For Claude Desktop or other MCP clients:
+
+```json
+{
+  "mcpServers": {
+    "pocketsmith": {
+      "command": "node",
+      "args": ["/path/to/pocketsmith-mcp/dist/index.js"],
+      "env": {
+        "POCKETSMITH_API_KEY": "your_api_key_here"
+      }
+    }
+  }
+}
+```
+
+---
+
+*Built with ❤️ and the [Model Context Protocol](https://modelcontextprotocol.io/)*
+
+---
+
+# 🚀 Original MCP TypeScript Template Documentation
+
+*The following documentation is from the original [cyanheads/mcp-ts-template](https://github.com/cyanheads/mcp-ts-template):*
 
 [![TypeScript](https://img.shields.io/badge/TypeScript-^5.8.3-blue.svg)](https://www.typescriptlang.org/)
 [![Model Context Protocol SDK](https://img.shields.io/badge/MCP%20SDK-^1.15.1-green.svg)](https://github.com/modelcontextprotocol/typescript-sdk)

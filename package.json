@@ -1,27 +1,27 @@
 {
-  "name": "mcp-ts-template",
-  "version": "1.7.1",
-  "description": "Jumpstart Model Context Protocol (MCP) development with this production-ready TypeScript template. Build robust MCP servers and clients with built-in utilities, authentication, and service integrations. Agent framework utilizing MCP Client included.",
+  "name": "pocketsmith-mcp",
+  "version": "0.1.0",
+  "description": "MCP server for managing budgets via PocketSmith API",
   "main": "dist/index.js",
   "files": [
     "dist"
   ],
   "bin": {
-    "mcp-ts-template": "dist/index.js"
+    "pocketsmith-mcp": "dist/index.js"
   },
   "exports": "./dist/index.js",
   "types": "dist/index.d.ts",
   "type": "module",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/cyanheads/mcp-ts-template.git"
+    "url": "git+https://github.com/joho/pocketsmith-mcp.git"
   },
   "bugs": {
-    "url": "https://github.com/cyanheads/mcp-ts-template/issues"
+    "url": "https://github.com/joho/pocketsmith-mcp/issues"
   },
-  "homepage": "https://github.com/cyanheads/mcp-ts-template#readme",
+  "homepage": "https://github.com/joho/pocketsmith-mcp#readme",
   "scripts": {
-    "build": "tsc && node --loader ts-node/esm scripts/make-executable.ts dist/index.js",
+    "build": "tsc && chmod +x dist/index.js",
     "start": "node dist/index.js",
     "start:stdio": "MCP_LOG_LEVEL=debug MCP_TRANSPORT_TYPE=stdio node dist/index.js",
     "start:http": "MCP_LOG_LEVEL=debug MCP_TRANSPORT_TYPE=http node dist/index.js",
@@ -34,7 +34,7 @@
     "tree": "ts-node --esm scripts/tree.ts",
     "fetch-spec": "ts-node --esm scripts/fetch-openapi-spec.ts",
     "format": "prettier --write \"**/*.{ts,js,json,md,html,css}\"",
-    "inspector": "npx mcp-inspector --config mcp.json --server mcp-ts-template",
+    "inspector": "npx mcp-inspector --config mcp.json --server pocketsmith-mcp",
     "db:duckdb-example": "MCP_LOG_LEVEL=debug tsc && node dist/storage/duckdbExample.js",
     "test:perf": "ts-node scripts/performance-tester.ts",
     "test:perf:batch": "ts-node scripts/performance-tester.ts --tool=echo_message --requests=100 --concurrency=10 --batchSize=10"
@@ -57,6 +57,7 @@
     "node-cron": "^4.2.1",
     "openai": "^5.10.1",
     "partial-json": "^0.1.7",
+    "pocketsmith-ts": "^1.1.0",
     "sanitize-html": "^2.17.0",
     "tiktoken": "^1.0.21",
     "ts-node": "^10.9.2",
@@ -68,41 +69,35 @@
     "zod": "^3.25.76"
   },
   "keywords": [
-    "typescript",
-    "template",
+    "pocketsmith",
+    "budget",
+    "finance",
+    "personal-finance",
     "mcp",
     "model-context-protocol",
-    "agent",
-    "autonomous-agent",
-    "agent-framework",
-    "architecture",
-    "error-handling",
-    "llm",
-    "ai-integration",
     "mcp-server",
-    "mcp-client",
-    "hono",
-    "stdio",
-    "http",
-    "authentication",
-    "oauth",
-    "jwt",
-    "openrouter",
-    "duckdb",
-    "zod"
+    "typescript",
+    "transactions",
+    "categories",
+    "receipts",
+    "spending",
+    "money-management",
+    "ai",
+    "agent",
+    "claude",
+    "llm"
   ],
-  "author": "cyanheads <casey@caseyjhand.com> (https://github.com/cyanheads/mcp-ts-template#readme)",
-  "license": "Apache-2.0",
-  "funding": [
+  "author": "John Barton <jb@johnbarton.co> (https://github.com/joho)",
+  "contributors": [
     {
-      "type": "github",
-      "url": "https://github.com/sponsors/cyanheads"
-    },
-    {
-      "type": "buy_me_a_coffee",
-      "url": "https://www.buymeacoffee.com/cyanheads"
+      "name": "cyanheads",
+      "email": "casey@caseyjhand.com",
+      "url": "https://github.com/cyanheads/mcp-ts-template",
+      "role": "Template Creator"
     }
   ],
+  "license": "Apache-2.0",
+
   "engines": {
     "node": ">=20.0.0"
   },

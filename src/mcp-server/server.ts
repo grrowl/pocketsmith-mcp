@@ -23,6 +23,30 @@ import { registerEchoResource } from "./resources/echoResource/index.js";
 import { registerCatFactFetcherTool } from "./tools/catFactFetcher/index.js";
 import { registerEchoTool } from "./tools/echoTool/index.js";
 import { registerFetchImageTestTool } from "./tools/imageTest/index.js";
+import {
+  registerGetAccountsTool,
+  registerGetTransactionsTool,
+  registerGetTransactionTool,
+  registerCreateTransactionTool,
+  registerUpdateTransactionTool,
+  registerDeleteTransactionTool,
+  registerGetCategoresTool,
+  registerCreateCategoryTool,
+  registerUpdateCategoryTool,
+  registerGetBudgetsTool,
+  registerGetUserSummaryTool,
+  registerGetTransactionAttachmentsTool,
+  registerGetUserAttachmentsTool,
+  registerCreateTransactionAttachmentTool,
+  registerGetCategoryRulesTool,
+  registerCreateCategoryRuleTool,
+  registerGetRecurringEventsTool,
+  registerGetAccountTransactionsTool,
+  registerGetBudgetSummaryTool,
+  registerGetCurrenciesTool,
+  registerGetInstitutionsTool,
+  registerGetTransactionAccountsTool,
+} from "./tools/pocketsmith/index.js";
 import { startHttpTransport } from "./transports/httpTransport.js";
 import { connectStdioTransport } from "./transports/stdioTransport.js";
 
@@ -63,6 +87,31 @@ async function createMcpServerInstance(): Promise<McpServer> {
       await registerEchoTool(server);
       await registerCatFactFetcherTool(server);
       await registerFetchImageTestTool(server);
+      
+      // Register PocketSmith tools
+      await registerGetAccountsTool(server);
+      await registerGetTransactionsTool(server);
+      await registerGetTransactionTool(server);
+      await registerCreateTransactionTool(server);
+      await registerUpdateTransactionTool(server);
+      await registerDeleteTransactionTool(server);
+      await registerGetCategoresTool(server);
+      await registerCreateCategoryTool(server);
+      await registerUpdateCategoryTool(server);
+      await registerGetBudgetsTool(server);
+      await registerGetUserSummaryTool(server);
+      await registerGetTransactionAttachmentsTool(server);
+      await registerGetUserAttachmentsTool(server);
+      await registerCreateTransactionAttachmentTool(server);
+      await registerGetCategoryRulesTool(server);
+      await registerCreateCategoryRuleTool(server);
+      await registerGetRecurringEventsTool(server);
+      await registerGetAccountTransactionsTool(server);
+      await registerGetBudgetSummaryTool(server);
+      await registerGetCurrenciesTool(server);
+      await registerGetInstitutionsTool(server);
+      await registerGetTransactionAccountsTool(server);
+      
       logger.info("Resources and tools registered successfully", context);
     },
     {

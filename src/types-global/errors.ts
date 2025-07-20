@@ -33,6 +33,8 @@ export enum BaseErrorCode {
   RATE_LIMITED = "RATE_LIMITED",
   /** The request timed out before a response could be generated. */
   TIMEOUT = "TIMEOUT",
+  /** The request to an external service failed. */
+  REQUEST_FAILED = "REQUEST_FAILED",
   /** The service is temporarily unavailable, possibly due to maintenance or overload. */
   SERVICE_UNAVAILABLE = "SERVICE_UNAVAILABLE",
   /** An unexpected error occurred on the server side. */
