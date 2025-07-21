@@ -91,6 +91,9 @@ export class Sanitization {
     "card",
     "cvv",
     "authorization",
+    "pocketsmith",
+    "x-developer-key",
+    "bearer",
   ];
 
   /**
@@ -571,6 +574,47 @@ export class Sanitization {
   }
 
   /**
+   * Sanitizes error messages to prevent sensitive data leakage.
+   * Removes potential API keys, tokens, and other sensitive patterns.
+   * 
+   * @param error - The error to sanitize (string, Error object, or any type)
+   * @returns A sanitized error message string
+   */
+  public sanitizeErrorMessage(error: unknown): string {
+    if (!error) return 'Unknown error';
+    
+    let errorStr = typeof error === 'string' ? error : 
+                   error instanceof Error ? error.message : 
+                   String(error);
+    
+    // Remove potential PocketSmith API keys (typically 64 character hex strings)
+    errorStr = errorStr.replace(/[a-f0-9]{64,}/gi, '[API_KEY_REDACTED]');
+    
+    // Remove any Bearer tokens
+    errorStr = errorStr.replace(/Bearer\s+[a-zA-Z0-9\-_.]+/gi, 'Bearer [TOKEN_REDACTED]');
+    
+    // Remove any JWT tokens (base64 patterns with dots)
+    errorStr = errorStr.replace(/[a-zA-Z0-9\-_]+\.[a-zA-Z0-9\-_]+\.[a-zA-Z0-9\-_]+/g, '[JWT_REDACTED]');
+    
+    // Remove any query strings that might contain sensitive data
+    errorStr = errorStr.replace(/\?[^?\s]*api[^?\s]*=[^&\s]*/gi, '?[API_PARAM_REDACTED]');
+    
+    // Remove any URLs with potential API keys
+    errorStr = errorStr.replace(/https?:\/\/[^\s]*[a-f0-9]{32,}[^\s]*/gi, '[URL_WITH_KEY_REDACTED]');
+    
+    // Remove X-Developer-Key headers (PocketSmith specific)
+    errorStr = errorStr.replace(/X-Developer-Key:\s*[a-f0-9]+/gi, 'X-Developer-Key: [KEY_REDACTED]');
+    
+    // Remove any 32+ character hex strings that could be keys
+    errorStr = errorStr.replace(/[a-f0-9]{32,}/gi, '[HEX_KEY_REDACTED]');
+    
+    // Remove environment variable patterns
+    errorStr = errorStr.replace(/POCKETSMITH_API_KEY[=:]\s*[a-f0-9]+/gi, 'POCKETSMITH_API_KEY=[REDACTED]');
+    
+    return errorStr;
+  }
+
+  /**
    * Recursively redacts sensitive fields in an object or array in place.
    * @param obj - The object or array to redact.
    * @private
@@ -614,3 +658,11 @@ export const sanitization = Sanitization.getInstance();
  */
 export const sanitizeInputForLogging = (input: unknown): unknown =>
   sanitization.sanitizeForLogging(input);
+
+/**
+ * Convenience function calling `sanitization.sanitizeErrorMessage`.
+ * @param error - The error to sanitize.
+ * @returns A sanitized error message string.
+ */
+export const sanitizeErrorMessage = (error: unknown): string =>
+  sanitization.sanitizeErrorMessage(error);

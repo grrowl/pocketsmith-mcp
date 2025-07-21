@@ -6,7 +6,7 @@
  * @module src/utils/internal/errorHandler
  */
 import { BaseErrorCode, McpError } from "../../types-global/errors.js";
-import { generateUUID, sanitizeInputForLogging } from "../index.js";
+import { generateUUID, sanitizeInputForLogging, sanitizeErrorMessage } from "../index.js";
 import { logger } from "./logger.js";
 import { RequestContext } from "./requestContext.js";
 
@@ -242,31 +242,35 @@ function getErrorName(error: unknown): string {
  * @private
  */
 function getErrorMessage(error: unknown): string {
+  let message: string;
+  
   if (error instanceof Error) {
-    return error.message;
-  }
-  if (error === null) {
-    return "Null value encountered as error";
-  }
-  if (error === undefined) {
-    return "Undefined value encountered as error";
-  }
-  if (typeof error === "string") {
-    return error;
-  }
-  try {
-    const str = String(error);
-    if (str === "[object Object]" && error !== null) {
-      try {
-        return `Non-Error object encountered: ${JSON.stringify(error)}`;
-      } catch {
-        return `Unstringifyable non-Error object encountered (constructor: ${error.constructor?.name || "Unknown"})`;
+    message = error.message;
+  } else if (error === null) {
+    message = "Null value encountered as error";
+  } else if (error === undefined) {
+    message = "Undefined value encountered as error";
+  } else if (typeof error === "string") {
+    message = error;
+  } else {
+    try {
+      const str = String(error);
+      if (str === "[object Object]" && error !== null) {
+        try {
+          message = `Non-Error object encountered: ${JSON.stringify(error)}`;
+        } catch {
+          message = `Unstringifyable non-Error object encountered (constructor: ${error.constructor?.name || "Unknown"})`;
+        }
+      } else {
+        message = str;
       }
+    } catch (e) {
+      message = `Error converting error to string: ${e instanceof Error ? e.message : "Unknown conversion error"}`;
     }
-    return str;
-  } catch (e) {
-    return `Error converting error to string: ${e instanceof Error ? e.message : "Unknown conversion error"}`;
   }
+  
+  // Sanitize the message to prevent API key leakage
+  return sanitizeErrorMessage(message);
 }
 
 /**
@@ -416,8 +420,9 @@ export class ErrorHandler {
       }
     }
 
+    const sanitizedErrorMessage = sanitizeErrorMessage(finalError.message || originalErrorMessage);
     logger.error(
-      `Error in ${operation}: ${finalError.message || originalErrorMessage}`,
+      `Error in ${operation}: ${sanitizedErrorMessage}`,
       logPayload as unknown as RequestContext, // Cast to RequestContext for logger compatibility
     );
 

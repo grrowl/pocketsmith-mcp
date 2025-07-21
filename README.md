@@ -8,6 +8,26 @@ Built on the [cyanheads/mcp-ts-template](https://github.com/cyanheads/mcp-ts-tem
 
 > See [POCKETSMITH_README.md](./POCKETSMITH_README.md) for complete PocketSmith-specific documentation.
 
+## 🔒 Security Considerations
+
+**⚠️ CRITICAL**: This server provides full access to your PocketSmith financial data. Please read our complete [Security Guide](SECURITY.md) before installation.
+
+### Security Quick Start
+- This server handles **highly sensitive financial data**
+- Your PocketSmith API key provides **complete access** to your financial accounts
+- Only use with **trusted MCP clients** and secure configurations
+- **Enable confirmation prompts** for all financial operations
+
+### Essential Security Checklist
+- [ ] Read the complete [SECURITY.md](SECURITY.md) documentation
+- [ ] Store API key in secure environment variables only
+- [ ] Use stdio transport for single-user scenarios
+- [ ] Never add financial operations to auto-approve lists
+- [ ] Set up regular API key rotation (recommended: every 90 days)
+- [ ] Monitor your PocketSmith account for unauthorized changes
+
+**🚨 Never share your API key or use this server on untrusted systems.**
+
 ## Quick Start
 
 1. **Install dependencies**:
