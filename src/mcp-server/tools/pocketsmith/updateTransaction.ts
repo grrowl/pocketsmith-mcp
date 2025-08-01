@@ -17,7 +17,7 @@ import { NULLABLE_FIELDS } from "./schemaHelpers.js";
 export const UpdateTransactionInputSchema = z.object({
   apiKey: z.string().optional().describe("PocketSmith API key (if not set via environment)"),
   accessToken: z.string().optional().describe("OAuth access token (if not using API key)"),
-  transactionId: z.number().int().describe("ID of the transaction to update"),
+  transactionId: z.coerce.number().int().describe("ID of the transaction to update"),
   payee: z.string().optional().describe("New payee name for the transaction"),
   amount: z.number().optional().describe("New transaction amount (positive for income, negative for expenses)"),
   date: z.string().optional().describe("New transaction date in YYYY-MM-DD format"),
@@ -171,19 +171,17 @@ export const registerUpdateTransactionTool = async (server: McpServer): Promise<
             openWorldHint: false,
           },
         },
-        async (params: unknown) => {
+        async (params: UpdateTransactionInput) => {
           const handlerContext: RequestContext =
             requestContextService.createRequestContext({
               parentRequestId: registrationContext.requestId,
               operation: "HandleToolRequest",
               toolName: toolName,
-              input: params,
+              input: { ...params, apiKey: "[REDACTED]", accessToken: "[REDACTED]" },
             });
 
           try {
-            // Validate input parameters with Zod
-            const validatedParams = UpdateTransactionInputSchema.parse(params);
-            const result = await updateTransactionLogic(validatedParams, handlerContext);
+            const result = await updateTransactionLogic(params, handlerContext);
             return {
               structuredContent: result,
               content: [
@@ -194,7 +192,7 @@ export const registerUpdateTransactionTool = async (server: McpServer): Promise<
             const mcpError = ErrorHandler.handleError(error, {
               operation: "updateTransactionHandler",
               context: handlerContext,
-              input: params,
+              input: { ...params, apiKey: "[REDACTED]", accessToken: "[REDACTED]" },
             }) as McpError;
 
             return {

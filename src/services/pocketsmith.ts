@@ -13,9 +13,30 @@ export class PocketSmithService {
 
   private formatError(error: unknown): string {
     if (typeof error === 'string') return error;
+    
     if (error && typeof error === 'object') {
+      // Handle common API error patterns
+      const errorObj = error as any;
+      
+      // Check for OpenAPI-style error responses
+      if (errorObj.message) return errorObj.message;
+      if (errorObj.error) return errorObj.error;
+      if (errorObj.detail) return errorObj.detail;
+      
+      // Check for HTTP response patterns
+      if (errorObj.status && errorObj.statusText) {
+        return `HTTP ${errorObj.status}: ${errorObj.statusText}`;
+      }
+      
+      // Check for network error patterns  
+      if (errorObj.code && errorObj.message) {
+        return `${errorObj.code}: ${errorObj.message}`;
+      }
+      
+      // Fallback to JSON string, but formatted nicely
       return JSON.stringify(error, null, 2);
     }
+    
     return String(error);
   }
   
@@ -40,7 +61,7 @@ export class PocketSmithService {
     if (error) {
       throw new McpError(
         BaseErrorCode.REQUEST_FAILED,
-        `Failed to fetch user: ${error}`
+        `Failed to fetch user: ${this.formatError(error)}`
       );
     }
     
@@ -56,7 +77,7 @@ export class PocketSmithService {
     if (error) {
       throw new McpError(
         BaseErrorCode.REQUEST_FAILED,
-        `Failed to fetch accounts: ${error}`
+        `Failed to fetch accounts: ${this.formatError(error)}`
       );
     }
     
@@ -91,7 +112,7 @@ export class PocketSmithService {
     if (error) {
       throw new McpError(
         BaseErrorCode.REQUEST_FAILED,
-        `Failed to fetch transactions: ${error}`
+        `Failed to fetch transactions: ${this.formatError(error)}`
       );
     }
     
@@ -118,7 +139,7 @@ export class PocketSmithService {
     if (error) {
       throw new McpError(
         BaseErrorCode.REQUEST_FAILED,
-        `Failed to create transaction: ${error}`
+        `Failed to create transaction: ${this.formatError(error)}`
       );
     }
     
@@ -134,7 +155,7 @@ export class PocketSmithService {
     if (error) {
       throw new McpError(
         BaseErrorCode.REQUEST_FAILED,
-        `Failed to fetch transaction: ${error}`
+        `Failed to fetch transaction: ${this.formatError(error)}`
       );
     }
     
@@ -161,7 +182,7 @@ export class PocketSmithService {
     if (error) {
       throw new McpError(
         BaseErrorCode.REQUEST_FAILED,
-        `Failed to update transaction: ${error}`
+        `Failed to update transaction: ${this.formatError(error)}`
       );
     }
     
@@ -177,7 +198,7 @@ export class PocketSmithService {
     if (error) {
       throw new McpError(
         BaseErrorCode.REQUEST_FAILED,
-        `Failed to delete transaction: ${error}`
+        `Failed to delete transaction: ${this.formatError(error)}`
       );
     }
     
@@ -204,7 +225,7 @@ export class PocketSmithService {
     if (error) {
       throw new McpError(
         BaseErrorCode.REQUEST_FAILED,
-        `Failed to create category: ${error}`
+        `Failed to create category: ${this.formatError(error)}`
       );
     }
     
@@ -231,7 +252,7 @@ export class PocketSmithService {
     if (error) {
       throw new McpError(
         BaseErrorCode.REQUEST_FAILED,
-        `Failed to update category: ${error}`
+        `Failed to update category: ${this.formatError(error)}`
       );
     }
     
@@ -247,7 +268,7 @@ export class PocketSmithService {
     if (error) {
       throw new McpError(
         BaseErrorCode.REQUEST_FAILED,
-        `Failed to fetch categories: ${error}`
+        `Failed to fetch categories: ${this.formatError(error)}`
       );
     }
     
@@ -263,7 +284,7 @@ export class PocketSmithService {
     if (error) {
       throw new McpError(
         BaseErrorCode.REQUEST_FAILED,
-        `Failed to fetch budgets: ${error}`
+        `Failed to fetch budgets: ${this.formatError(error)}`
       );
     }
     
@@ -296,7 +317,7 @@ export class PocketSmithService {
     if (error) {
       throw new McpError(
         BaseErrorCode.REQUEST_FAILED,
-        `Failed to fetch budget summary: ${error}`
+        `Failed to fetch budget summary: ${this.formatError(error)}`
       );
     }
     
@@ -361,7 +382,7 @@ export class PocketSmithService {
     if (error) {
       throw new McpError(
         BaseErrorCode.REQUEST_FAILED,
-        `Failed to fetch category transactions: ${error}`
+        `Failed to fetch category transactions: ${this.formatError(error)}`
       );
     }
     
@@ -377,7 +398,7 @@ export class PocketSmithService {
     if (error) {
       throw new McpError(
         BaseErrorCode.REQUEST_FAILED,
-        `Failed to fetch transaction attachments: ${error}`
+        `Failed to fetch transaction attachments: ${this.formatError(error)}`
       );
     }
     
@@ -393,7 +414,7 @@ export class PocketSmithService {
     if (error) {
       throw new McpError(
         BaseErrorCode.REQUEST_FAILED,
-        `Failed to fetch user attachments: ${error}`
+        `Failed to fetch user attachments: ${this.formatError(error)}`
       );
     }
     
@@ -418,7 +439,7 @@ export class PocketSmithService {
     if (error) {
       throw new McpError(
         BaseErrorCode.REQUEST_FAILED,
-        `Failed to create user attachment: ${error}`
+        `Failed to create user attachment: ${this.formatError(error)}`
       );
     }
     
@@ -439,7 +460,7 @@ export class PocketSmithService {
     if (error) {
       throw new McpError(
         BaseErrorCode.REQUEST_FAILED,
-        `Failed to assign attachment to transaction: ${error}`
+        `Failed to assign attachment to transaction: ${this.formatError(error)}`
       );
     }
     
@@ -463,7 +484,7 @@ export class PocketSmithService {
     if (error) {
       throw new McpError(
         BaseErrorCode.REQUEST_FAILED,
-        `Failed to fetch recurring events: ${error}`
+        `Failed to fetch recurring events: ${this.formatError(error)}`
       );
     }
     
@@ -479,7 +500,7 @@ export class PocketSmithService {
     if (error) {
       throw new McpError(
         BaseErrorCode.REQUEST_FAILED,
-        `Failed to fetch category rules: ${error}`
+        `Failed to fetch category rules: ${this.formatError(error)}`
       );
     }
     
@@ -504,7 +525,7 @@ export class PocketSmithService {
     if (error) {
       throw new McpError(
         BaseErrorCode.REQUEST_FAILED,
-        `Failed to create category rule: ${error}`
+        `Failed to create category rule: ${this.formatError(error)}`
       );
     }
     
@@ -520,7 +541,7 @@ export class PocketSmithService {
     if (error) {
       throw new McpError(
         BaseErrorCode.REQUEST_FAILED,
-        `Failed to fetch institutions: ${error}`
+        `Failed to fetch institutions: ${this.formatError(error)}`
       );
     }
     
@@ -536,7 +557,7 @@ export class PocketSmithService {
     if (error) {
       throw new McpError(
         BaseErrorCode.REQUEST_FAILED,
-        `Failed to fetch transaction accounts: ${error}`
+        `Failed to fetch transaction accounts: ${this.formatError(error)}`
       );
     }
     
@@ -550,7 +571,7 @@ export class PocketSmithService {
     if (error) {
       throw new McpError(
         BaseErrorCode.REQUEST_FAILED,
-        `Failed to fetch currencies: ${error}`
+        `Failed to fetch currencies: ${this.formatError(error)}`
       );
     }
     

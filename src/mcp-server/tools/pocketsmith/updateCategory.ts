@@ -17,7 +17,7 @@ import { NULLABLE_FIELDS, REQUIRED_NULLABLE_FIELDS } from "./schemaHelpers.js";
 export const UpdateCategoryInputSchema = z.object({
   apiKey: z.string().optional().describe("PocketSmith API key (if not set via environment)"),
   accessToken: z.string().optional().describe("OAuth access token (if not using API key)"),
-  categoryId: z.number().int().describe("ID of the category to update"),
+  categoryId: z.coerce.number().int().describe("ID of the category to update"),
   title: z.string().optional().describe("New name for the category"),
   colour: NULLABLE_FIELDS.colour.describe("New hex color code for the category (e.g., #FF5733)"),
   parentId: NULLABLE_FIELDS.parent_id.describe("New parent category ID (use null to remove parent)"),

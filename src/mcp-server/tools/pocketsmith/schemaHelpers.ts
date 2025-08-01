@@ -29,8 +29,8 @@ export const createOptionalNullableField = <T extends z.ZodTypeAny>(
  */
 export const NULLABLE_FIELDS = {
   // Category-related fields
-  parent_id: createOptionalNullableField(z.number().int(), "Parent category ID"),
-  category_id: createOptionalNullableField(z.number().int(), "Category ID"),
+  parent_id: createOptionalNullableField(z.coerce.number().int(), "Parent category ID"),
+  category_id: createOptionalNullableField(z.coerce.number().int(), "Category ID"),
   colour: createOptionalNullableField(z.string(), "Color (hex format)"),
   
   // Transaction-related fields
@@ -57,7 +57,7 @@ export const NULLABLE_FIELDS = {
  */
 export const REQUIRED_NULLABLE_FIELDS = {
   // Category-related fields that are always present but can be null
-  parent_id: createNullableField(z.number().int(), "Parent category ID"),
+  parent_id: createNullableField(z.coerce.number().int(), "Parent category ID"),
   colour: createNullableField(z.string(), "Color (hex format)"),
   
   // Transaction-related fields that are always present but can be null
@@ -108,3 +108,5 @@ export function validateNullableField(
   
   return value;
 }
+
+
