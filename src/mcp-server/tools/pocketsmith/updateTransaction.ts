@@ -171,17 +171,19 @@ export const registerUpdateTransactionTool = async (server: McpServer): Promise<
             openWorldHint: false,
           },
         },
-        async (params: UpdateTransactionInput) => {
+        async (params: unknown) => {
           const handlerContext: RequestContext =
             requestContextService.createRequestContext({
               parentRequestId: registrationContext.requestId,
               operation: "HandleToolRequest",
               toolName: toolName,
-              input: { ...params, apiKey: "[REDACTED]", accessToken: "[REDACTED]" },
+              input: params,
             });
 
           try {
-            const result = await updateTransactionLogic(params, handlerContext);
+            // Validate input parameters with Zod
+            const validatedParams = UpdateTransactionInputSchema.parse(params);
+            const result = await updateTransactionLogic(validatedParams, handlerContext);
             return {
               structuredContent: result,
               content: [
@@ -192,7 +194,7 @@ export const registerUpdateTransactionTool = async (server: McpServer): Promise<
             const mcpError = ErrorHandler.handleError(error, {
               operation: "updateTransactionHandler",
               context: handlerContext,
-              input: { ...params, apiKey: "[REDACTED]", accessToken: "[REDACTED]" },
+              input: params,
             }) as McpError;
 
             return {
