@@ -20,7 +20,9 @@ export const GetTransactionsInputSchema = z.object({
   endDate: z.string().optional().describe("End date for transaction search (YYYY-MM-DD)"),
   search: z.string().optional().describe("Search term to filter transactions by payee or note"),
   type: z.enum(["credit", "debit"]).optional().describe("Filter by transaction type"),
-  limit: z.number().int().min(1).max(1000).optional().default(50).describe("Maximum number of transactions to return (1-1000, default 50)"),
+  page: z.number().int().min(1).optional().default(1).describe("Page number for pagination (starts at 1)"),
+  uncategorized: z.boolean().optional().describe("Filter to only uncategorized transactions"),
+  needsReview: z.boolean().optional().describe("Filter to only transactions that need review"),
 });
 
 export type GetTransactionsInput = z.infer<typeof GetTransactionsInputSchema>;
@@ -42,6 +44,7 @@ export const GetTransactionsResponseSchema = z.object({
     }),
     currency_code: z.string(),
     type: z.string(),
+    confirmationStatus: z.enum(["confirmed", "uncategorized", "needs_review"]).optional().describe("Category confirmation status"),
   })).describe("List of transactions"),
   summary: z.object({
     totalCount: z.number(),
@@ -76,7 +79,9 @@ export async function getTransactionsLogic(
     endDate: params.endDate,
     search: params.search,
     type: params.type,
-    limit: params.limit,
+    page: params.page,
+    uncategorized: params.uncategorized,
+    needsReview: params.needsReview,
   });
 
   // Calculate summary
@@ -89,6 +94,18 @@ export async function getTransactionsLogic(
       totalCredit += amount;
     } else {
       totalDebit += Math.abs(amount);
+    }
+    
+    // Determine confirmation status
+    let confirmationStatus: "confirmed" | "uncategorized" | "needs_review" | undefined;
+    const hasCategory = transaction.category && transaction.category.id;
+    
+    if (!hasCategory) {
+      confirmationStatus = "uncategorized";
+    } else if (params.needsReview) {
+      confirmationStatus = "needs_review";
+    } else {
+      confirmationStatus = "confirmed";
     }
     
     return {
@@ -107,6 +124,7 @@ export async function getTransactionsLogic(
       },
       currency_code: transaction.transaction_account?.currency_code ?? '',
       type: transaction.type ?? '',
+      confirmationStatus,
     };
   });
 

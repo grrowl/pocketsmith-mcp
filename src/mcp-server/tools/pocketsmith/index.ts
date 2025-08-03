@@ -5,6 +5,7 @@
 
 export { registerGetAccountsTool } from "./getAccounts.js";
 export { registerGetTransactionsTool } from "./getTransactions.js";
+export { registerGetUncategorizedTransactionsTool } from "./getUncategorizedTransactions.js";
 export { registerGetTransactionTool } from "./getTransaction.js";
 export { registerCreateTransactionTool } from "./createTransaction.js";
 export { registerUpdateTransactionTool } from "./updateTransaction.js";
@@ -37,3 +38,8 @@ export { registerGetBudgetSummaryTool } from "./getBudgetSummary.js";
 export { registerGetCurrenciesTool } from "./getCurrencies.js";
 export { registerGetInstitutionsTool } from "./getInstitutions.js";
 export { registerGetTransactionAccountsTool } from "./getTransactionAccounts.js";
+
+// Enhanced workflow tools
+export { registerGetTransactionCountTool } from "./getTransactionCount.js";
+export { registerBulkUpdateCategoriesTool } from "./bulkUpdateCategories.js";
+export { registerGetEnhancedTransactionsTool } from "./getEnhancedTransactions.js";

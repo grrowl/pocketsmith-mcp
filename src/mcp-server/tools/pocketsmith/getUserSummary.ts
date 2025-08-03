@@ -102,7 +102,7 @@ export async function getUserSummaryLogic(
   let recentTransactions;
   if (params.includeRecentTransactions) {
     const transactions = await service.getTransactions(user.id ?? 0, context, {
-      limit: params.transactionLimit,
+      page: 1,
     });
     
     recentTransactions = transactions.map(transaction => ({

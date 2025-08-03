@@ -92,7 +92,9 @@ export class PocketSmithService {
       endDate?: string;
       search?: string;
       type?: 'credit' | 'debit';
-      limit?: number;
+      page?: number;
+      uncategorized?: boolean;
+      needsReview?: boolean;
     }
   ) {
     logger.debug('Fetching transactions', { ...context, userId, options });
@@ -104,7 +106,9 @@ export class PocketSmithService {
           end_date: options?.endDate,
           search: options?.search,
           type: options?.type,
-          limit: options?.limit,
+          page: options?.page,
+          uncategorised: options?.uncategorized ? 1 : undefined,
+          needs_review: options?.needsReview ? 1 : undefined,
         }
       }
     });

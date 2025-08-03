@@ -26,6 +26,7 @@ import { registerFetchImageTestTool } from "./tools/imageTest/index.js";
 import {
   registerGetAccountsTool,
   registerGetTransactionsTool,
+  registerGetUncategorizedTransactionsTool,
   registerGetTransactionTool,
   registerCreateTransactionTool,
   registerUpdateTransactionTool,
@@ -46,6 +47,9 @@ import {
   registerGetCurrenciesTool,
   registerGetInstitutionsTool,
   registerGetTransactionAccountsTool,
+  registerGetTransactionCountTool,
+  registerBulkUpdateCategoriesTool,
+  registerGetEnhancedTransactionsTool,
 } from "./tools/pocketsmith/index.js";
 import { startHttpTransport } from "./transports/httpTransport.js";
 import { connectStdioTransport } from "./transports/stdioTransport.js";
@@ -91,6 +95,7 @@ async function createMcpServerInstance(): Promise<McpServer> {
       // Register PocketSmith tools
       await registerGetAccountsTool(server);
       await registerGetTransactionsTool(server);
+      await registerGetUncategorizedTransactionsTool(server);
       await registerGetTransactionTool(server);
       await registerCreateTransactionTool(server);
       await registerUpdateTransactionTool(server);
@@ -111,6 +116,9 @@ async function createMcpServerInstance(): Promise<McpServer> {
       await registerGetCurrenciesTool(server);
       await registerGetInstitutionsTool(server);
       await registerGetTransactionAccountsTool(server);
+      await registerGetTransactionCountTool(server);
+      await registerBulkUpdateCategoriesTool(server);
+      await registerGetEnhancedTransactionsTool(server);
       
       logger.info("Resources and tools registered successfully", context);
     },
